@@ -15,7 +15,9 @@
 #elif KEYBOARD_handwired_dactyl_manuform_dmote_62key
     #include "62key.h"
 #elif KEYBOARD_handwired_dactyl_manuform_5x6_right_trackball
-#    include "5x6_right_trackball.h"
+    #include "5x6_right_trackball.h"
+#elif KEYBOARD_handwired_dactyl_manuform_5x6_dart
+    #include "5x6_dart.h"
 #endif
 
 #include "quantum.h"

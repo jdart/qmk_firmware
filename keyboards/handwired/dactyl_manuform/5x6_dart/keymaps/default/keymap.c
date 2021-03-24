@@ -77,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      IDE_TESTD,IDE_TEST,RAISE   , KC_GRV,                                           KC_LBRC, KC_RBRC,PSS_PREV,PSS_NEXT,
                                          KC_BSPC, LOWER   ,         KC_RCMD  , KC_SPC ,
                                          KC_DEL , RAISE   ,         KC_RCTL  , KC_ENT ,
-                                         KC_LCTL, KC_LCMD ,         KC_ROPT  , KC_RCMD
+                                         KC_TAB , KC_LCMD ,         KC_ROPT  , KC_ESC
   ),
 
   [_LOWER] = LAYOUT_5x6_dart(

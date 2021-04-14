@@ -2,12 +2,14 @@
 
 #include QMK_KEYBOARD_H
 
-#define _QWERTY 0
-#define _LOWER 1
-#define _RAISE 2
+#define _COLMAK 0
+#define _QWERTY 1
+#define _LOWER 2
+#define _RAISE 3
 
 #define RAISE MO(_RAISE)
 #define LOWER MO(_LOWER)
+#define QWERTY TG(_QWERTY)
 
 #undef TAPPING_TERM
 #define TAPPING_TERM 320
@@ -21,17 +23,27 @@
 #define PERMISSIVE_HOLD
 
 // Left-hand home row mods
-#define HOME_A LALT_T(KC_A)
-#define HOME_S LGUI_T(KC_S)
-#define HOME_D LSFT_T(KC_D)
-#define HOME_F LCTL_T(KC_F)
+#define HOMEQ_A LALT_T(KC_A)
+#define HOMEQ_S LGUI_T(KC_S)
+#define HOMEQ_D LSFT_T(KC_D)
+#define HOMEQ_F LCTL_T(KC_F)
 
 // Right-hand home row mods
-#define HOME_J RCTL_T(KC_J)
-#define HOME_K RSFT_T(KC_K)
-#define HOME_L RGUI_T(KC_L)
-#define HOME_SCLN LALT_T(KC_SCLN)
+#define HOMEQ_J RCTL_T(KC_J)
+#define HOMEQ_K RSFT_T(KC_K)
+#define HOMEQ_L RGUI_T(KC_L)
+#define HOMEQ_SCLN LALT_T(KC_SCLN)
 
+#define HOMEC_A LALT_T(KC_A)
+#define HOMEC_R LGUI_T(KC_R)
+#define HOMEC_S LSFT_T(KC_S)
+#define HOMEC_T LCTL_T(KC_T)
+
+// Right-hand home row mods
+#define HOMEC_N RCTL_T(KC_N)
+#define HOMEC_E RSFT_T(KC_E)
+#define HOMEC_I RGUI_T(KC_I)
+#define HOMEC_O LALT_T(KC_O)
 
 void keyboard_post_init_user(void) {
   // Customise these values to desired behaviour
@@ -102,26 +114,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-//   [_QWERTY] = LAYOUT_5x6_dart(
-//      KC_EQUAL , KC_1  , KC_2    , KC_3  , KC_4  , KC_5 ,            KC_6  , KC_7   , KC_8  , KC_9   , KC_0  , KC_MINUS,
-//      KC_TAB   , KC_Q  , KC_W    , KC_E  , KC_R  , KC_T ,            KC_Y  , KC_U   , KC_I  , KC_O   , KC_P  , KC_BSLASH,
-//      KC_ESC   , KC_A  , KC_S    , KC_D  , KC_F  , KC_G ,            KC_H  , KC_J   , KC_K  , KC_L   ,KC_SCLN, KC_QUOT,
-//      KC_LSHIFT, KC_Z  , KC_X    , KC_C  , KC_V  , KC_B ,            KC_N  , KC_M   ,KC_COMM, KC_DOT ,KC_SLSH, KC_RSHIFT,
-//      IDE_TESTD,IDE_TEST,RAISE   , KC_GRV,                                           KC_LBRC, KC_RBRC,PSS_PREV,PSS_NEXT,
-//                                          KC_BSPC, LOWER   ,         KC_RCMD  , KC_SPC ,
-//                                          KC_DEL , RAISE   ,         KC_RCTL  , KC_ENT ,
-//                                          KC_TAB , KC_LCMD ,         KC_ROPT  , KC_ESC
-//   ),
+  [_COLMAK] = LAYOUT_5x6_dart(
+     KC_ESC   , KC_1  , KC_2    , KC_3  , KC_4  , KC_5 ,            KC_6   , KC_7   , KC_8   , KC_9   , KC_0     , KC_MINUS,
+     KC_EQUAL , KC_Q  , KC_W    , KC_F  , KC_P ,  KC_B ,            KC_J   , KC_L   , KC_U   , KC_Y   , KC_SCLN  , KC_BSLASH,
+     KC_TAB   , HOMEC_A,HOMEC_R , HOMEC_S,HOMEC_T,KC_G ,            KC_M   , HOMEC_N, HOMEC_E, HOMEC_I, HOMEC_O  , KC_QUOT,
+     KC_LSHIFT, KC_Z  , KC_X    , KC_C  , KC_D ,  KC_V ,            KC_K   , KC_H   ,KC_COMM , KC_DOT , KC_SLSH  , KC_RSHIFT ,
+     IDE_TESTD,IDE_TEST,RAISE   , KC_GRV,                                            KC_LBRC , KC_RBRC,PSS_PREV  , PSS_NEXT,
+                                         KC_DEL,  KC_BSPC,          KC_SPC, RAISE   ,
+                                         KC_TAB , LOWER  ,          KC_ENT, KC_ESC  ,
+                                         KC_LCTL, TG(_RAISE)  ,     QWERTY, KC_LCTL
+  ),
 
   [_QWERTY] = LAYOUT_5x6_dart(
      KC_ESC   , KC_1  , KC_2    , KC_3  , KC_4  , KC_5 ,            KC_6   , KC_7   , KC_8   , KC_9   , KC_0     , KC_MINUS,
      KC_EQUAL , KC_Q  , KC_W    , KC_E  , KC_R  , KC_T ,            KC_Y   , KC_U   , KC_I   , KC_O   , KC_P     , KC_BSLASH,
-     KC_TAB   , HOME_A, HOME_S  , HOME_D, HOME_F, KC_G ,            KC_H   , HOME_J , HOME_K , HOME_L , HOME_SCLN, KC_QUOT,
+     KC_TAB   , HOMEQ_A,HOMEQ_S , HOMEQ_D,HOMEQ_F,KC_G ,            KC_H   , HOMEQ_J, HOMEQ_K, HOMEQ_L, HOMEQ_SCLN,KC_QUOT,
      KC_LSHIFT, KC_Z  , KC_X    , KC_C  , KC_V  , KC_B ,            KC_N   , KC_M   ,KC_COMM , KC_DOT ,KC_SLSH   , KC_RSHIFT ,
      IDE_TESTD,IDE_TEST,RAISE   , KC_GRV,                                            KC_LBRC , KC_RBRC,PSS_PREV  , PSS_NEXT,
                                          KC_DEL,  KC_BSPC,          KC_SPC, RAISE   ,
                                          KC_TAB , LOWER  ,          KC_ENT, KC_ESC  ,
-                                         KC_LCTL, TG(_RAISE)  ,     KC_ESC, KC_LCTL
+                                         KC_LCTL, TG(_RAISE)  ,     KC_TRNS,KC_LCTL
   ),
 
   [_LOWER] = LAYOUT_5x6_dart(

@@ -2,10 +2,11 @@
 
 #include QMK_KEYBOARD_H
 
-#define _COLMAK 0
-#define _QWERTY 1
-#define _LOWER 2
-#define _RAISE 3
+#define _QWERTY 0
+#define _COLEMAK 4
+#define _LOWER 1
+#define _RAISE 2
+#define _ADJUST 3
 
 #define RAISE MO(_RAISE)
 #define LOWER MO(_LOWER)
@@ -32,7 +33,7 @@
 #define HOMEQ_J RCTL_T(KC_J)
 #define HOMEQ_K RSFT_T(KC_K)
 #define HOMEQ_L RGUI_T(KC_L)
-#define HOMEQ_SCLN LALT_T(KC_SCLN)
+#define HOMEQ_SC LALT_T(KC_SCLN)
 
 #define HOMEC_A LALT_T(KC_A)
 #define HOMEC_R LGUI_T(KC_R)
@@ -45,13 +46,12 @@
 #define HOMEC_I RGUI_T(KC_I)
 #define HOMEC_O LALT_T(KC_O)
 
-void keyboard_post_init_user(void) {
-  // Customise these values to desired behaviour
-  //debug_enable=true;
-  //debug_matrix=true;
-  //debug_keyboard=true;
-  //debug_mouse=true;
-}
+#define RAISE_BK LT(_RAISE, KC_BSPC)
+#define LOWER_TB LT(_LOWER, KC_TAB)
+#define LOWER_ESC LT(_LOWER, KC_ESC)
+#define RAISE_ENT LT(_RAISE, KC_ENT)
+#define RAISE_SP LT(_RAISE, KC_SPC)
+#define LOWER_ENT LT(_LOWER, KC_ENT)
 
 enum custom_keycodes {
     IDE_TEST = SAFE_RANGE,
@@ -114,47 +114,59 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-  [_COLMAK] = LAYOUT_5x6_dart(
-     KC_ESC   , KC_1  , KC_2    , KC_3  , KC_4  , KC_5 ,            KC_6   , KC_7   , KC_8   , KC_9   , KC_0     , KC_MINUS,
-     KC_EQUAL , KC_Q  , KC_W    , KC_F  , KC_P ,  KC_B ,            KC_J   , KC_L   , KC_U   , KC_Y   , KC_SCLN  , KC_BSLASH,
-     KC_TAB   , HOMEC_A,HOMEC_R , HOMEC_S,HOMEC_T,KC_G ,            KC_M   , HOMEC_N, HOMEC_E, HOMEC_I, HOMEC_O  , KC_QUOT,
-     KC_LSHIFT, KC_Z  , KC_X    , KC_C  , KC_D ,  KC_V ,            KC_K   , KC_H   ,KC_COMM , KC_DOT , KC_SLSH  , KC_RSHIFT ,
-     IDE_TESTD,IDE_TEST,RAISE   , KC_GRV,                                            KC_LBRC , KC_RBRC,PSS_PREV  , PSS_NEXT,
-                                         KC_DEL,  KC_BSPC,          KC_SPC, RAISE   ,
-                                         KC_TAB , LOWER  ,          KC_ENT, KC_ESC  ,
-                                         KC_LCTL, TG(_RAISE)  ,     QWERTY, KC_LCTL
+  [_QWERTY] = LAYOUT_5x6_dart(
+     _______, _______,_______  ,_______,_______ ,_______ ,          _______,_______ ,_______ ,_______ ,_______   ,_______ ,
+     _______, KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,           KC_Y   , KC_U   , KC_I   , KC_O   , KC_P     , KC_MINS  ,
+     _______, HOMEQ_A, HOMEQ_S, HOMEQ_D, HOMEQ_F, KC_G   ,           KC_H   , HOMEQ_J, HOMEQ_K, HOMEQ_L, HOMEQ_SC , KC_QUOT  ,
+     _______, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,           KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH  , KC_BSLASH,
+     IDE_TESTD,IDE_TEST,_______ , _______,                                            _______ , _______,PSS_PREV  , PSS_NEXT,
+                                         _______, RAISE_BK,          RAISE_SP , _______ ,
+                                         KC_DEL , LOWER_TB,          LOWER_ENT, KC_ESC,
+                                         _______, TG(_ADJUST),       _______  , _______
   ),
 
-  [_QWERTY] = LAYOUT_5x6_dart(
-     KC_ESC   , KC_1  , KC_2    , KC_3  , KC_4  , KC_5 ,            KC_6   , KC_7   , KC_8   , KC_9   , KC_0     , KC_MINUS,
-     KC_EQUAL , KC_Q  , KC_W    , KC_E  , KC_R  , KC_T ,            KC_Y   , KC_U   , KC_I   , KC_O   , KC_P     , KC_BSLASH,
-     KC_TAB   , HOMEQ_A,HOMEQ_S , HOMEQ_D,HOMEQ_F,KC_G ,            KC_H   , HOMEQ_J, HOMEQ_K, HOMEQ_L, HOMEQ_SCLN,KC_QUOT,
-     KC_LSHIFT, KC_Z  , KC_X    , KC_C  , KC_V  , KC_B ,            KC_N   , KC_M   ,KC_COMM , KC_DOT ,KC_SLSH   , KC_RSHIFT ,
-     IDE_TESTD,IDE_TEST,RAISE   , KC_GRV,                                            KC_LBRC , KC_RBRC,PSS_PREV  , PSS_NEXT,
-                                         KC_DEL,  KC_BSPC,          KC_SPC, RAISE   ,
-                                         KC_TAB , LOWER  ,          KC_ENT, KC_ESC  ,
-                                         KC_LCTL, TG(_RAISE)  ,     KC_TRNS,KC_LCTL
+  [_COLEMAK] = LAYOUT_5x6_dart(
+     _______  ,_______,_______  ,_______,_______ ,_______ ,          _______,_______ ,_______ ,_______ ,_______   ,_______ ,
+     _______  , KC_Q  , KC_W    , KC_F  , KC_P   , KC_B ,            KC_J   , KC_L   , KC_U   , KC_Y   , KC_SCLN  , KC_BSLASH,
+     _______  , HOMEC_A,HOMEC_R , HOMEC_S,HOMEC_T, KC_G ,            KC_M   , HOMEC_N, HOMEC_E, HOMEC_I, HOMEC_O  , KC_QUOT,
+     _______  , KC_Z  , KC_X    , KC_C  , KC_D   , KC_V ,            KC_K   , KC_H   ,KC_COMM , KC_DOT , KC_SLSH  , KC_MINS ,
+     IDE_TESTD,IDE_TEST,_______ , _______,                                            _______ , _______, PSS_PREV , PSS_NEXT,
+                                         _______, RAISE_BK,          RAISE_SP , _______ ,
+                                         KC_DEL , LOWER_TB,          LOWER_ENT, KC_ESC,
+                                         _______, TG(_ADJUST),       _______  , _______
   ),
 
   [_LOWER] = LAYOUT_5x6_dart(
-     KC_F12 , KC_F1 , KC_F2 , KC_F3 , KC_F4 , KC_F5 ,                        KC_F6  , KC_F7 , KC_F8 , KC_F9 ,KC_F10 ,KC_F11 ,
-     _______,_______,_______,_______,_______,_______,                        _______,SPEC_LEFT,SPEC_RIGHT,_______,_______,KC_MINUS,
-     _______,_______,_______,_______,_______,_______,                        KC_LEFT,KC_DOWN,KC_UP,KC_RGHT,_______,_______,
-     _______,_______,_______,_______,_______,_______,                        KC_ESC,KC_ESC ,KC_TAB,KC_END ,_______,_______,
-     KC_TRNS,_______,_______,_______,                                            _______,_______,_______,_______,
-                                             _______,KC_PSCR,            KC_TRNS,_______,
-                                             _______,KC_TRNS,            KC_TRNS,_______,
+     _______,_______,_______,_______,_______ ,_______ ,                     _______,_______ ,_______ ,_______ ,_______ , _______,
+     _______,KC_EXLM,KC_AT,  KC_LCBR,KC_RCBR,KC_PIPE,                       _______, KC_QUOT, KC_BSLS, _______, _______, KC_BSLS,
+     _______,KC_HASH,KC_DLR, KC_LPRN,KC_RPRN,KC_GRV,                        KC_PLUS, KC_MINS, KC_SLSH, KC_ASTR, KC_PERC, KC_QUOT,
+     _______,KC_PERC,KC_CIRC,KC_LBRC,KC_RBRC,KC_TILD,                       KC_AMPR, KC_EQL , KC_COMM, KC_DOT,  KC_SLSH, KC_MINS,
+     _______,_______,_______,_______,                                                           _______,_______,_______,_______,
+                                             _______,KC_SCLN,            KC_SCLN,_______,
+                                             _______,KC_EQL,             KC_EQL,_______,
                                              _______,KC_TRNS,            KC_TRNS,KC_TRNS
   ),
 
   [_RAISE] = LAYOUT_5x6_dart(
-       KC_TILD,KC_EXLM, KC_AT ,KC_HASH,KC_DLR ,KC_PERC,                        KC_CIRC,KC_AMPR,KC_ASTR,KC_LPRN,KC_RPRN,KC_DEL,
-       _______,_______,_______,KC_LBRC,KC_RBRC,_______,                        _______,KC_MS_BTN1,KC_MS_BTN2 ,KC_SLCK,_______,_______,
-       KC_ESC ,_______,_______,KC_LCBR,KC_RCBR,_______,                        KC_MS_LEFT,KC_MS_DOWN,KC_MS_UP,KC_MS_RIGHT,_______,_______,
-       _______,_______,_______,KC_LPRN,KC_RPRN,_______,                        _______,KC_MS_WH_DOWN,KC_MS_WH_UP,_______,_______,_______,
-       _______,_______,_______,_______,                                                        _______,_______,_______,_______,
-                                               KC_ACL0,_______,             KC_EQL ,_______,
-                                               KC_ACL1,_______,             _______,_______,
-                                               KC_ACL2,KC_TRNS,         _______,_______
+       _______,_______,_______,_______,_______,_______,                        _______,_______ ,_______,_______,_______,_______,
+       _______,_______, KC_7  , KC_8  , KC_9  ,_______,                        _______,_______ ,_______,KC_MPRV,KC_MPLY,KC_MNXT,
+       _______,_______, KC_4  , KC_5  , KC_6  ,_______,                        KC_LEFT, KC_DOWN, KC_UP ,KC_RGHT,_______,_______,
+       _______, KC_0  , KC_1  , KC_2  , KC_3  ,_______,                        _______,_______,_______,_______,_______,_______,
+       _______,_______,_______,_______,                                                          _______,_______,_______,_______,
+                                               _______,_______,             _______,_______,
+                                               _______,_______,             _______,_______,
+                                               _______,KC_TRNS,             _______,_______
   ),
+
+  [_ADJUST] = LAYOUT_5x6_dart(
+       _______,_______,_______,_______,_______,_______,                         _______,_______ ,_______ ,_______,_______,_______,
+       _______,_______,KC_F7  , KC_F8 , KC_F9 , KC_F10,                         _______,KC_BTN1 ,KC_BTN2 ,_______,_______,_______,
+       _______,_______,KC_F4  , KC_F5 , KC_F6 ,_______,                         KC_MS_LEFT,KC_MS_DOWN,KC_MS_UP,KC_MS_RIGHT,_______,_______,
+       _______,_______,KC_F1  , KC_F2 , KC_F3 ,_______,                         _______,KC_MS_WH_DOWN,KC_MS_WH_UP,_______,_______,_______,
+       _______,_______,_______,_______,                                                          _______,_______,_______,_______,
+                                               KC_ACL0,_______,             _______,_______,
+                                               KC_ACL1,_______,             _______,_______,
+                                               KC_ACL2,_______,             _______,_______
+  ),
+
 };

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2021 Quentin LEBASTARD <qlebastard@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,10 +26,11 @@
 #define MATRIX_ROWS 8
 #define MATRIX_COLS 6
 #define RGBLIGHT_LIMIT_VAL 180
-#define MATRIX_ROW_PINS { B5, F7, F6, B6 }
-#define MATRIX_COL_PINS { B4, E6, C6, B1, B3, B2 }
 
-#define DIODE_DIRECTION ROW2COL
+#define MATRIX_ROW_PINS { B1, B3, B2, B6 }
+#define MATRIX_COL_PINS { B5, B4, E6, D7, C6, D4 }
+
+#define DIODE_DIRECTION COL2ROW
 
 #define RGB_DI_PIN D2
 #define RGBLED_NUM 42
